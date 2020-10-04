@@ -1,5 +1,4 @@
 import pygame
-import time
 import random
 
 pygame.init()
@@ -37,14 +36,14 @@ def snake(snake_particle, snake_array):
                          x[0], x[1], snake_particle, snake_particle])
 
 
-def message(msg, color):
+def message(msg, color, x, y):
     mesg = font_style.render(msg, True, color)
-    display.blit(mesg, [display_width * 0.15, display_height * 0.35])
+    display.blit(mesg, [x, y])
 
 
 def gameLoop():
-    game_over = False
-    game_close = False
+    game_closed = False
+    game_lost = False
 
     x1 = display_width / 2
     y1 = display_height / 2
@@ -60,25 +59,28 @@ def gameLoop():
     food_posY = round(random.randrange(
         0, display_height - snake_particle) / 10.0) * 10.0
 
-    while not game_over:
+    while not game_closed:
 
-        while game_close == True:
+        while game_lost == True:
             display.fill(color_blue)
-            message("LMAO noob R - Replay || Q / ESC - Quit", color_red)
+            message("LMAO NOOB",
+                    color_red, display_width * 0.15, display_height * 0.35)
+            message("R - Replay || Q / ESC - Quit", color_red,
+                    display_width * 0.15, display_height * 0.50)
             show_score(snake_length - 1)
             pygame.display.update()
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
-                        game_over = True
-                        game_close = False
+                        game_closed = True
+                        game_lost = False
                     if event.key == pygame.K_r:
                         gameLoop()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game_over = True
+                game_closed = True
 
             if event.type == pygame.KEYDOWN:
 
@@ -99,7 +101,7 @@ def gameLoop():
                     y1_change = snake_particle
 
         if x1 >= display_width or x1 < 0 or y1 >= display_height or y1 < 0:
-            game_close = True
+            game_lost = True
         x1 += x1_change
         y1 += y1_change
         display.fill(color_blue)
@@ -114,7 +116,7 @@ def gameLoop():
 
         for x in snake_array[:-1]:
             if x == snake_Head:
-                game_close = True
+                game_lost = True
 
         snake(snake_particle, snake_array)
         show_score(snake_length - 1)
