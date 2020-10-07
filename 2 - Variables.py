@@ -1,4 +1,3 @@
-# Variables
 
 print("***** DEFINITION AND TYPES *****")
 var_string = "Hello!"

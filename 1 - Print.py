@@ -1,4 +1,3 @@
-# Printing & Comments
 
 print("Hello, world!")
 
